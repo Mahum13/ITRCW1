@@ -79,7 +79,91 @@ void initWorld() {
       num++;
     }
   }
+  
+    //check left of target cell 
+  for (int i = 1; i < MAX_X; i++) {
+    int check_cell_x = int(T.x) - (i * 1);
+    changeCellValue(check_cell_x, int(T.y), i);
+    int check_cell_yUP = int(T.y) - (i * 1);
+    changeCellValue(check_cell_x, check_cell_yUP, i);
+    int check_cell_yDOWN = int(T.y) + (i * 1);
+    changeCellValue(check_cell_x, check_cell_yDOWN, i);
+    fillInSkippedValues(i);
+  }
+  //check right of target cell
+  for (int i = 1; i< MAX_X; i++) {
+    int check_cell_x = int(T.x) + (i * 1);
+    changeCellValue(check_cell_x, int(T.y), i);
+    int check_cell_yUP = int(T.y) - (i * 1);
+    changeCellValue(check_cell_x, check_cell_yUP, i);
+    int check_cell_yDOWN = int(T.y) + (i * 1);
+    changeCellValue(check_cell_x, check_cell_yDOWN, i);
+    fillInSkippedValues(i);
+  }
+  //check above target cell
+  for (int i =1; i < MAX_Y; i++) {
+    int check_cell_y = int(T.y) - (i * 1);
+    changeCellValue(int(T.x), check_cell_y, i);
+    int check_cell_xLEFT = int(T.x) - (i * 1);
+    changeCellValue(check_cell_xLEFT, check_cell_y, i);
+    int check_cell_xRIGHT = int(T.x) + (i * 1);
+    changeCellValue(check_cell_xRIGHT, check_cell_y, i);
+    fillInSkippedValues(i);
+  
+  }
+  //check below target cell
+  for (int i= 1; i<MAX_Y; i++) {
+    int check_cell_y = int(T.y) + (i * 1);
+    changeCellValue(int(T.x), check_cell_y, i);
+    int check_cell_xLEFT = int(T.x) - (i * 1);
+    changeCellValue(check_cell_xLEFT, check_cell_y, i);
+    int check_cell_xRIGHT = int(T.x) + (i * 1); 
+    changeCellValue(check_cell_xRIGHT, check_cell_y, i);
+    fillInSkippedValues(i);
+  }
 } // end of initWorld()
+
+void fillInSkippedValues(int i) {
+  //go to top left corner of square
+  int cell_newXTOP = int(T.x) - (i * 1);
+  int cell_newYTOP = int(T.y) - (i* 1);
+  if (i>1) {
+    //go right from the top left corner of the square
+    for (int j = 1; j <= (i*2); j++) {
+      int check_cell_x = cell_newXTOP + j;
+      changeCellValue(check_cell_x, cell_newYTOP, i);
+     }
+     //go down from the top left corner of the square
+     for (int j = 1; j <= (i* 2); j++) {
+       int check_cell_y = cell_newYTOP + j;
+       changeCellValue(cell_newXTOP, check_cell_y, i);
+     }
+  }
+  
+  //go to bottom right corner of square
+  int cell_newXBOTTOM = int(T.x) + (i * 1);
+  int cell_newYBOTTOM = int(T.y) + (i * 1);
+  if (i > 1) {
+    //go left from the bottom right of the square
+    for (int j = 1; j <= (i*2); j++) {
+      int check_cell_x = cell_newXBOTTOM - j;
+      changeCellValue(check_cell_x, cell_newYBOTTOM, i);
+    }
+    //go up from the bottom right corner of the square
+    for (int j =1; j <= (i*2); j++) {
+      int check_cell_y = cell_newYBOTTOM - j;
+      changeCellValue(cell_newXBOTTOM, check_cell_y, i);
+    }
+  }
+}
+
+void changeCellValue(int cell_x, int cell_y, int i) {
+  if ( validCell(cell_x, cell_y) ) {
+    if (world[cell_y][cell_x] == CELL_EMPTY) {
+      world[cell_y][cell_x] = CELL_TARGET - (20 * i); 
+    }
+  }
+}
 
 
 /**
@@ -137,6 +221,8 @@ void keyPressed() {
       try_x = int(R.x) - 1;
     } else if (( key == CODED ) && ( keyCode == RIGHT )) {
       try_x = int(R.x) + 1;
+    } else if ((key == 'n') || (key == 'N')) {
+      
     }
     if ( collide( try_x, try_y )) {
       println( "oops! an obstacle!" );
@@ -154,6 +240,22 @@ void keyPressed() {
     }
   }
 } // end of keyPressed()
+
+void moveViaPotentialField() {
+  //check if target is above the robot, then only consider sensor positions 0, 1, 2
+  if (int(T.y) > int(R.y)) {
+    
+    
+    
+  } //else check if target it below the robot
+  else if (int(T.y) < int(R.y)) {
+  
+  } //else if target on the same line as robot
+  else {
+  
+  }
+  
+}
 
 
 /**
